@@ -18,3 +18,11 @@ def get_person(tx, name):
 with driver.session() as session:
     names = session.read_transaction(get_person, "Guilherme")
     print(names)
+
+def update_person(tx, old_name, new_name):
+    tx.run("MATCH (n:Person {name: $old_name}) "
+           "SET n.name = $new_name", old_name=old_name, new_name=new_name)
+
+with driver.session() as session:
+    session.write_transaction(update_person, "Guilherme", "Diniz")
+    print("Nome atualizado!")
