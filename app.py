@@ -9,7 +9,7 @@ def create(tx, name): # tx é uma transação em Cypher, que é a linguagem de c
     tx.run("CREATE (n:Person {name: $name})", name=name)
 
 with driver.session() as session: # abrir uma sessão para executar a operação create.
-    session.write_transaction(create, "Guilherme") # session representa a conexão
+    session.write_transaction(create, "Darlan") # session representa a conexão
 
 def get_person(tx, name):
     result = tx.run("MATCH (n:Person {name: $name}) RETURN n.name AS name", name=name)
@@ -26,3 +26,11 @@ def update_person(tx, old_name, new_name):
 with driver.session() as session:
     session.write_transaction(update_person, "Guilherme", "Diniz")
     print("Nome atualizado!")
+
+def delete_person(tx, name):
+    tx.run("MATCH (n:Person {name: $name}) "
+           "DELETE n", name=name)
+
+with driver.session() as session:
+    session.write_transaction(delete_person, "Diniz")
+    print("Pessoa deletada!")
